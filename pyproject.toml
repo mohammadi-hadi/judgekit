@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "judgekit"
+version = "0.1.0"
+description = "Audit an LLM judge before you trust it: agreement, bias probes, calibration and consistency, with bootstrap confidence intervals."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Hadi Mohammadi" }]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "pydantic>=2.5",
+    "matplotlib>=3.8",
+]
+keywords = ["llm-as-judge", "llm-evaluation", "calibration", "bias", "inter-rater-agreement"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/mohammadi-hadi/judgekit"
+Issues = "https://github.com/mohammadi-hadi/judgekit/issues"
+
+[project.scripts]
+judgekit = "judgekit.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "scikit-learn>=1.4",
+    "scipy>=1.12",
+    "krippendorff>=0.6",
+    "statsmodels>=0.14",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+files = ["src"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "matplotlib.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
