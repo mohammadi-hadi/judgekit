@@ -64,6 +64,12 @@ of what the probes see, not a model leaderboard.
 ## Install
 
 ```
+pip install judgekit
+```
+
+Or the latest development version straight from GitHub:
+
+```
 pip install git+https://github.com/mohammadi-hadi/judgekit
 ```
 
