@@ -47,6 +47,9 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+judgekit = ["py.typed"]
+
 [tool.ruff]
 line-length = 100
 src = ["src", "tests"]
