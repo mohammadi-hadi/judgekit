@@ -203,6 +203,21 @@ measures what outcome-only judges miss on agent trajectories;
 [EvalMORAAL](https://github.com/mohammadi-hadi/EvalMORAAL) applies
 chain-of-thought judging to moral alignment across 20 models.
 
+## Citation
+
+If judgekit is useful in your research, please cite it (see
+[CITATION.cff](CITATION.cff)):
+
+```bibtex
+@software{mohammadi_judgekit,
+  author  = {Mohammadi, Hadi},
+  title   = {judgekit: audit an LLM judge before you trust it},
+  url     = {https://github.com/mohammadi-hadi/judgekit},
+  version = {0.2.0},
+  year    = {2026}
+}
+```
+
 ## License
 
 MIT
