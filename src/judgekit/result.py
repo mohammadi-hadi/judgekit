@@ -6,6 +6,10 @@ import math
 from dataclasses import dataclass
 
 
+def _finite(value: float) -> float | None:
+    return None if math.isnan(value) else value
+
+
 @dataclass(frozen=True)
 class ProbeResult:
     """One measured quantity with its uncertainty and its innocent range.
@@ -35,3 +39,28 @@ class ProbeResult:
         if math.isnan(low) or math.isnan(high) or math.isnan(self.value):
             return None
         return high < self.innocent[0] or low > self.innocent[1]
+
+    def to_dict(self) -> dict[str, object]:
+        """JSON-safe view of the result; nan becomes null."""
+        return {
+            "name": self.name,
+            "value": _finite(self.value),
+            "ci": [_finite(self.ci[0]), _finite(self.ci[1])],
+            "innocent": list(self.innocent) if self.innocent is not None else None,
+            "n": self.n,
+            "triggered": self.triggered,
+            "detail": self.detail,
+        }
+
+
+@dataclass(frozen=True)
+class SkippedProbe:
+    """A probe that could not run, and the data that would enable it.
+
+    A skip is a statement about the log file, not about the judge: the audit
+    surfaces it so the next run can be logged richer instead of the check
+    silently disappearing.
+    """
+
+    name: str
+    needs: str

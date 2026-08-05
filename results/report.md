@@ -77,6 +77,10 @@ Flags:
 | swap flip rate | 0.056 | [0.025, 0.093] | - | the winner flipped under order swap in 5.6% of 161 matched pairs |
 | identical-pair decisiveness | 0.500 | [0.350, 0.650] | - | declared a winner between identical candidates in 50.0% of 40 verdicts |
 
+Not run — a skip describes the log file, not the judge:
+
+- **re-judgment unanimity** needs the same item judged more than once (sample_index 0..k-1, per presentation order for pairwise)
+
 ## self-server (300 graded)
 
 Flags:
@@ -92,6 +96,10 @@ Flags:
 | verbosity bias | 0.054 | [-0.064, 0.166] | ok | score-length rank correlation is +0.05 after controlling for the human score (raw +0.03, n=300) |
 | self-preference | 0.755 | [0.612, 0.882] | FLAG | scores its own model's candidates +0.76 scale points above its departure on others (100 own vs 200 other verdicts) |
 | central tendency | 0.974 | [0.938, 1.010] | ok | judge score spread is 0.97x the human spread over 300 verdicts |
+
+Not run — a skip describes the log file, not the judge:
+
+- **re-judgment unanimity** needs the same item judged more than once (sample_index 0..k-1, per presentation order for pairwise)
 
 ## middler (300 graded)
 
@@ -109,6 +117,10 @@ Flags:
 | self-preference | 0.000 | [-0.199, 0.203] | ok | scores its own model's candidates +0.00 scale points above its departure on others (100 own vs 200 other verdicts) |
 | central tendency | 0.627 | [0.590, 0.664] | FLAG | judge score spread is 0.63x the human spread over 300 verdicts |
 
+Not run — a skip describes the log file, not the judge:
+
+- **re-judgment unanimity** needs the same item judged more than once (sample_index 0..k-1, per presentation order for pairwise)
+
 ## overconfident (1000 binary)
 
 Flags:
@@ -121,3 +133,7 @@ Flags:
 | cohen kappa | 0.444 | [0.390, 0.496] | - | chance-corrected label agreement |
 | expected calibration error | 0.107 | [0.086, 0.136] | FLAG | mean gap between claimed confidence and observed frequency, equal-mass bins |
 | brier score | 0.196 | n/a | - | decomposes exactly into reliability 0.196 - resolution 0.249 + uncertainty 0.249 |
+
+Not run — a skip describes the log file, not the judge:
+
+- **re-judgment unanimity** needs the same item judged more than once (sample_index 0..k-1, per presentation order for pairwise)

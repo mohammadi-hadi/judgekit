@@ -1,3 +1,10 @@
+import json
+import tomllib
+from pathlib import Path
+
+import pytest
+
+import judgekit
 from judgekit.cli import main
 from judgekit.io import dump_verdicts
 from judgekit.synthetic import human_pairwise, pair_items, pairwise_judge
@@ -22,6 +29,10 @@ def test_report_command_writes_report(tmp_path, capsys):
     text = (out / "report.md").read_text()
     assert "position preference" in text
     assert (out / "figures" / "position.png").exists()
+
+    payload = json.loads((out / "report.json").read_text())
+    assert payload["judge_id"] == "judge"
+    assert any(result["name"] == "position preference" for result in payload["probes"])
 
 
 def test_report_fail_on_flags_exits_nonzero(tmp_path, capsys):
@@ -54,3 +65,16 @@ def test_demo_and_inject_readme(tmp_path, capsys):
     updated = readme.read_text()
     assert "| judge | implanted defect |" in updated
     assert "stale" not in updated
+
+
+def test_version_flag_prints_the_package_version(capsys):
+    with pytest.raises(SystemExit) as excinfo:
+        main(["--version"])
+    assert excinfo.value.code == 0
+    assert judgekit.__version__ in capsys.readouterr().out
+
+
+def test_version_matches_pyproject():
+    pyproject = Path(__file__).parents[1] / "pyproject.toml"
+    metadata = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+    assert metadata["project"]["version"] == judgekit.__version__

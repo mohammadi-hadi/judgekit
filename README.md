@@ -111,6 +111,11 @@ Or from the shell, with an exit code CI can gate on:
 judgekit report judge.jsonl --human human.jsonl --out audit --fail-on-flags
 ```
 
+Alongside `report.md` the audit writes `report.json` for pipelines that gate
+on specific numbers. Any check that could not run is listed in the report with
+the exact fields to log to enable it — a skip describes the log file, not the
+judge.
+
 ## What it checks
 
 | check | question it answers | needs |

@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
-from judgekit import demo
+from judgekit import __version__, demo
 from judgekit.audit import run_audit
 from judgekit.io import load_verdicts
 from judgekit.report import position_figure, reliability_figure, render_markdown
@@ -29,6 +30,9 @@ def _cmd_report(args: argparse.Namespace) -> int:
     (out_dir / "report.md").write_text(
         render_markdown([audit], f"judge audit: {audit.judge_id}", preamble=preamble),
         encoding="utf-8",
+    )
+    (out_dir / "report.json").write_text(
+        json.dumps(audit.to_dict(), indent=2) + "\n", encoding="utf-8"
     )
 
     for flag in audit.flags:
@@ -54,6 +58,7 @@ def _cmd_inject_readme(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="judgekit", description=__doc__)
+    parser.add_argument("--version", action="version", version=f"judgekit {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
 
     report = commands.add_parser("report", help="audit a judge's verdicts")

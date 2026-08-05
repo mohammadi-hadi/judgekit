@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "judgekit"
-version = "0.1.0"
+version = "0.2.0"
 description = "Audit an LLM judge before you trust it: agreement, bias probes, calibration and consistency, with bootstrap confidence intervals."
 readme = "README.md"
 license = { text = "MIT" }

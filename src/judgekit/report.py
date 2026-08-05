@@ -77,6 +77,10 @@ def render_markdown(audits: list[AuditReport], title: str, preamble: str = "") -
                 f"| {_verdict(result)} | {result.detail} |"
             )
         lines.append("")
+        if audit.skipped:
+            lines += ["Not run — a skip describes the log file, not the judge:", ""]
+            lines += [f"- **{skip.name}** needs {skip.needs}" for skip in audit.skipped]
+            lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
 

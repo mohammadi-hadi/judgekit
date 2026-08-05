@@ -17,7 +17,7 @@ from judgekit.agreement import cohen_kappa, exact_agreement, spearman, within_on
 from judgekit.bootstrap import bootstrap_ci
 from judgekit.calibration import brier, ece_equal_mass, murphy_decomposition, reliability_curve
 from judgekit.io import align_on_items, by_kind
-from judgekit.result import ProbeResult
+from judgekit.result import ProbeResult, SkippedProbe
 from judgekit.schema import BinaryVerdict, GradedVerdict, PairwiseVerdict, Verdict
 
 # The finite-sample floor of equal-mass ECE at the demo's scale is a few
@@ -35,6 +35,7 @@ class AuditReport:
     agreement: list[ProbeResult] = field(default_factory=list)
     calibration: list[ProbeResult] = field(default_factory=list)
     probes: list[ProbeResult] = field(default_factory=list)
+    skipped: list[SkippedProbe] = field(default_factory=list)
     # Small data slices the figures are drawn from.
     reliability: list[tuple[float, float, int]] | None = None
     graded_scores: tuple[list[float], list[float]] | None = None
@@ -46,6 +47,20 @@ class AuditReport:
     @property
     def flags(self) -> list[ProbeResult]:
         return [result for result in self.results if result.triggered is True]
+
+    def to_dict(self) -> dict[str, object]:
+        """JSON-safe view of the whole audit, for pipelines that gate on it."""
+        return {
+            "judge_id": self.judge_id,
+            "n_graded": self.n_graded,
+            "n_binary": self.n_binary,
+            "n_pairwise": self.n_pairwise,
+            "agreement": [result.to_dict() for result in self.agreement],
+            "calibration": [result.to_dict() for result in self.calibration],
+            "probes": [result.to_dict() for result in self.probes],
+            "flags": [flag.name for flag in self.flags],
+            "skipped": [{"name": skip.name, "needs": skip.needs} for skip in self.skipped],
+        }
 
 
 def _grouped_scores(
@@ -256,6 +271,12 @@ def run_audit(
     seed: int = 0,
 ) -> AuditReport:
     """Audit one judge against one reference; see the module docstring."""
+    judge_ids = {verdict.judge_id for verdict in judge}
+    if len(judge_ids) > 1:
+        raise ValueError(
+            f"one audit reads one judge, got judge_ids {sorted(judge_ids)}; "
+            "split the verdicts and audit each judge separately"
+        )
     judge_graded, judge_binary, judge_pairwise = by_kind(judge)
     human_graded, human_binary, human_pairwise = by_kind(human)
     judge_id = judge[0].judge_id if judge else "judge"
@@ -263,10 +284,18 @@ def run_audit(
     agreement: list[ProbeResult] = []
     calibration: list[ProbeResult] = []
     probes: list[ProbeResult] = []
+    skipped: list[SkippedProbe] = []
     reliability = None
     graded_scores = None
 
     graded_pairs = align_on_items(judge_graded, human_graded) if human_graded else []
+    if judge_graded and not graded_pairs:
+        skipped.append(
+            SkippedProbe(
+                "graded agreement and bias probes",
+                "reference graded verdicts sharing item_id values with the judge's",
+            )
+        )
     if graded_pairs:
         scales = {(v.scale_min, v.scale_max) for v, _ in graded_pairs} | {
             (v.scale_min, v.scale_max) for _, v in graded_pairs
@@ -278,41 +307,132 @@ def run_audit(
             [judge_verdict.score for judge_verdict, _ in graded_pairs],
             [human_verdict.score for _, human_verdict in graded_pairs],
         )
-        for probe in (
-            bias.verbosity_graded(graded_pairs, seed=seed),
-            bias.self_preference(graded_pairs, judge_model, seed=seed) if judge_model else None,
-            bias.central_tendency(graded_pairs, seed=seed),
-        ):
-            if probe is not None:
-                probes.append(probe)
+        verbosity_probe = bias.verbosity_graded(graded_pairs, seed=seed)
+        if verbosity_probe is not None:
+            probes.append(verbosity_probe)
+        else:
+            skipped.append(
+                SkippedProbe("verbosity bias", "candidate_len on at least 3 graded verdicts")
+            )
+
+        if judge_model is None:
+            skipped.append(
+                SkippedProbe(
+                    "self-preference",
+                    "the judge's model name (judge_model / --judge-model) "
+                    "plus candidate_model on graded verdicts",
+                )
+            )
+        else:
+            self_probe = bias.self_preference(graded_pairs, judge_model, seed=seed)
+            if self_probe is not None:
+                probes.append(self_probe)
+            else:
+                skipped.append(
+                    SkippedProbe(
+                        "self-preference",
+                        "candidate_model on graded verdicts, with both own-model "
+                        "and other-model candidates present",
+                    )
+                )
+
+        spread_probe = bias.central_tendency(graded_pairs, seed=seed)
+        if spread_probe is not None:
+            probes.append(spread_probe)
+        else:
+            skipped.append(
+                SkippedProbe(
+                    "central tendency",
+                    "at least 3 aligned graded verdicts with varying reference scores",
+                )
+            )
 
     binary_pairs = align_on_items(judge_binary, human_binary) if human_binary else []
+    if judge_binary and not binary_pairs:
+        skipped.append(
+            SkippedProbe(
+                "binary agreement and calibration",
+                "reference binary verdicts sharing item_id values with the judge's",
+            )
+        )
     if binary_pairs:
         agreement.extend(_agreement_binary(binary_pairs, seed))
         calibration, reliability = _calibration(binary_pairs, seed)
+        if not calibration:
+            confident = sum(1 for j, _ in binary_pairs if j.p_positive is not None)
+            skipped.append(
+                SkippedProbe(
+                    "calibration (ECE, Brier)",
+                    f"confidence on at least 20 aligned binary verdicts (found {confident})",
+                )
+            )
 
     if judge_pairwise:
         pairwise_pairs = (
             align_on_items(judge_pairwise, human_pairwise) if human_pairwise else []
         )
-        if pairwise_pairs:
+        if not pairwise_pairs:
+            skipped.append(
+                SkippedProbe(
+                    "choice agreement and verbosity bias (pairwise)",
+                    "reference pairwise verdicts sharing item_id values with the judge's",
+                )
+            )
+        else:
             agreement.extend(_agreement_pairwise(pairwise_pairs, seed))
             verbosity = bias.verbosity_pairwise(pairwise_pairs, seed=seed)
             if verbosity is not None:
                 probes.append(verbosity)
-        for probe in (
-            bias.position_preference(judge_pairwise, seed=seed),
-            bias.swap_flip_rate(judge_pairwise, seed=seed),
-            bias.identical_pair_decisiveness(judge_pairwise, seed=seed),
+            else:
+                skipped.append(
+                    SkippedProbe(
+                        "verbosity bias (pairwise)",
+                        "a_len and b_len on pairwise verdicts, with unequal lengths "
+                        "and decisive verdicts on both sides",
+                    )
+                )
+        for probe, skip in (
+            (
+                bias.position_preference(judge_pairwise, seed=seed),
+                SkippedProbe(
+                    "position preference", "at least one decisive (non-tie) pairwise verdict"
+                ),
+            ),
+            (
+                bias.swap_flip_rate(judge_pairwise, seed=seed),
+                SkippedProbe(
+                    "swap flip rate",
+                    "each pair judged in both presentation orders (swapped false and true)",
+                ),
+            ),
+            (
+                bias.identical_pair_decisiveness(judge_pairwise, seed=seed),
+                SkippedProbe(
+                    "identical-pair decisiveness",
+                    'pairs of identical candidates marked meta {"identical": true}',
+                ),
+            ),
         ):
             if probe is not None:
                 probes.append(probe)
+            else:
+                skipped.append(skip)
 
+    stability_ran = False
     for kind_verdicts in (judge_graded, judge_binary, judge_pairwise):
         if kind_verdicts:
             stability = consistency.resample_consistency(kind_verdicts, seed=seed)
             if stability is not None:
                 probes.append(stability)
+                stability_ran = True
+    if judge and not stability_ran:
+        skipped.append(
+            SkippedProbe(
+                "re-judgment unanimity",
+                "the same item judged more than once (sample_index 0..k-1, "
+                "per presentation order for pairwise)",
+            )
+        )
 
     return AuditReport(
         judge_id=judge_id,
@@ -322,6 +442,7 @@ def run_audit(
         agreement=agreement,
         calibration=calibration,
         probes=probes,
+        skipped=skipped,
         reliability=reliability,
         graded_scores=graded_scores,
     )
