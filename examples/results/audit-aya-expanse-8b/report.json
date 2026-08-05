@@ -1,0 +1,86 @@
+{
+  "judge_id": "aya-expanse:8b",
+  "n_graded": 0,
+  "n_binary": 0,
+  "n_pairwise": 210,
+  "agreement": [
+    {
+      "name": "choice agreement",
+      "value": 0.43333333333333335,
+      "ci": [
+        0.3904761904761905,
+        0.4857142857142857
+      ],
+      "innocent": null,
+      "n": 210,
+      "triggered": null,
+      "detail": "share of presentations whose canonical choice matches the reference on 210 verdicts"
+    }
+  ],
+  "calibration": [],
+  "probes": [
+    {
+      "name": "verbosity bias (pairwise)",
+      "value": 0.10555555555555551,
+      "ci": [
+        -0.00013888888888876206,
+        0.21666666666666662
+      ],
+      "innocent": [
+        -0.1,
+        0.1
+      ],
+      "n": 180,
+      "triggered": false,
+      "detail": "picks the longer candidate +10.6% more often than the human reference on 180 unequal-length pairs"
+    },
+    {
+      "name": "position preference",
+      "value": 0.9095238095238095,
+      "ci": [
+        0.8714285714285714,
+        0.9428571428571428
+      ],
+      "innocent": [
+        0.45,
+        0.55
+      ],
+      "n": 210,
+      "triggered": true,
+      "detail": "chose the presented-first candidate in 91.0% of 210 decisive verdicts across 105 items (0 ties excluded)"
+    },
+    {
+      "name": "swap flip rate",
+      "value": 0.819047619047619,
+      "ci": [
+        0.7428571428571429,
+        0.8857142857142857
+      ],
+      "innocent": null,
+      "n": 105,
+      "triggered": null,
+      "detail": "the winner flipped under order swap in 81.9% of 105 matched pairs"
+    },
+    {
+      "name": "identical-pair decisiveness",
+      "value": 1.0,
+      "ci": [
+        1.0,
+        1.0
+      ],
+      "innocent": null,
+      "n": 30,
+      "triggered": null,
+      "detail": "declared a winner between identical candidates in 100.0% of 30 verdicts"
+    }
+  ],
+  "flags": [
+    "position preference"
+  ],
+  "skipped": [
+    {
+      "name": "re-judgment unanimity",
+      "needs": "the same item judged more than once (sample_index 0..k-1, per presentation order for pairwise)"
+    }
+  ]
+}

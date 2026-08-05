@@ -51,16 +51,18 @@ orders. Verdicts and full reports are committed under
 
 | judge (temperature 0) | truth agreement | position preference | verbosity excess | flips under swap | decisive on identical pairs |
 |---|---|---|---|---|---|
+| aya-expanse:8b | 0.433 | **0.910** (flag) | +0.106 | 0.819 | 1.000 |
 | qwen2.5:14b | 0.667 | **0.768** (flag) | +0.131 | 0.568 | 0.200 |
 | llama3.1:8b | 0.443 | 0.576 | **+0.483** (flag) | 0.171 | 1.000 |
 
-Same task, two different failure modes. The 14B judge follows slot order:
-presented-first wins 76.8% of decisive verdicts and swapping the order flips
-56.8% of matched pairs. The 8B judge grades effort instead, picking the longer
-answer 48 points more often than correctness warrants, agreeing with ground
-truth less often than a coin flip, and never once declaring a tie between two
-identical answers. n=105 pairs, adversarial by construction — an illustration
-of what the probes see, not a model leaderboard.
+Same task, different failure modes at different severities. Two judges follow
+slot order — aya picks whatever is presented first 91.0% of the time and flips
+81.9% of pairs when the order is swapped; qwen sits at 76.8% and 56.8%. The
+llama judge grades effort instead, picking the longer answer 48 points more
+often than correctness warrants and agreeing with ground truth less often than
+a coin flip. Two of the three never once declare a tie between identical
+answers. n=105 pairs, adversarial by construction — an illustration of what
+the probes see, not a model leaderboard.
 
 ## Install
 
