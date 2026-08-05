@@ -39,6 +39,28 @@ fails if a committed number differs from what the code produces.
 
 ![reliability](results/figures/reliability.png)
 
+## Two real judges, audited
+
+[`examples/audit_ollama.py`](examples/audit_ollama.py) builds a small
+adversarial arithmetic benchmark — one answer provably correct by
+construction, and half the time the wrong answer is the long, worked-through
+one — then asks a local Ollama model to judge every pair in both presentation
+orders. Verdicts and full reports are committed under
+[examples/results](examples/results/).
+
+| judge (temperature 0) | truth agreement | position preference | verbosity excess | flips under swap | decisive on identical pairs |
+|---|---|---|---|---|---|
+| qwen2.5:14b | 0.667 | **0.768** (flag) | +0.131 | 0.568 | 0.200 |
+| llama3.1:8b | 0.443 | 0.576 | **+0.483** (flag) | 0.171 | 1.000 |
+
+Same task, two different failure modes. The 14B judge follows slot order:
+presented-first wins 76.8% of decisive verdicts and swapping the order flips
+56.8% of matched pairs. The 8B judge grades effort instead, picking the longer
+answer 48 points more often than correctness warrants, agreeing with ground
+truth less often than a coin flip, and never once declaring a tie between two
+identical answers. n=105 pairs, adversarial by construction — an illustration
+of what the probes see, not a model leaderboard.
+
 ## Install
 
 ```
