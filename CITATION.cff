@@ -7,6 +7,11 @@ authors:
     given-names: Hadi
     orcid: "https://orcid.org/0000-0003-0860-9200"
 repository-code: "https://github.com/mohammadi-hadi/judgekit"
+doi: 10.5281/zenodo.21802788
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21802787
+    description: "DOI for all versions; resolves to the latest release"
 license: MIT
 version: 0.2.0
 date-released: "2026-08-05"
