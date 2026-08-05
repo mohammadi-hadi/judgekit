@@ -67,11 +67,12 @@ the probes see, not a model leaderboard.
 ## Install
 
 ```
-pip install git+https://github.com/mohammadi-hadi/judgekit
+pip install judgekit
 ```
 
-Python 3.11+. Runtime dependencies: numpy, pydantic, matplotlib. A PyPI
-release is planned; until it lands, the command above is the install.
+Python 3.11+. Runtime dependencies: numpy, pydantic, matplotlib. The
+development version installs with
+`pip install git+https://github.com/mohammadi-hadi/judgekit`.
 
 ## Quickstart
 
