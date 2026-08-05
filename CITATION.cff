@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "judgekit: audit an LLM judge before you trust it"
+message: "If you use judgekit in your work, please cite it."
+type: software
+authors:
+  - family-names: Mohammadi
+    given-names: Hadi
+    orcid: "https://orcid.org/0000-0003-0860-9200"
+repository-code: "https://github.com/mohammadi-hadi/judgekit"
+license: MIT
+version: 0.1.0
+date-released: "2026-08-05"
+keywords:
+  - llm-as-judge
+  - evaluation
+  - calibration
+  - bias
