@@ -3,7 +3,7 @@
 Audit an LLM judge before you trust it.
 
 [![ci](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml/badge.svg)](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21802787.svg)](https://doi.org/10.5281/zenodo.21802787)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21802868.svg)](https://doi.org/10.5281/zenodo.21802868)
 
 An LLM judge is a model too. It can prefer whichever answer came first, reward
 padding, favor its own outputs, hug the middle of the scale, and say "90%
@@ -214,7 +214,7 @@ If judgekit is useful in your research, please cite it (see
   author  = {Mohammadi, Hadi},
   title   = {judgekit: audit an LLM judge before you trust it},
   url     = {https://github.com/mohammadi-hadi/judgekit},
-  doi     = {10.5281/zenodo.21802788},
+  doi     = {10.5281/zenodo.21802869},
   version = {0.2.0},
   year    = {2026}
 }
