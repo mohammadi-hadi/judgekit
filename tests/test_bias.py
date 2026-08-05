@@ -52,7 +52,7 @@ def test_swap_flip_rate_counts_only_matched_flips():
     result = swap_flip_rate(verdicts)
     assert result.value == pytest.approx(0.2)
     assert result.n == 30
-    assert result.triggered is True
+    assert result.triggered is None
 
 
 def test_swap_flip_rate_zero_for_stable_judge():
@@ -62,7 +62,7 @@ def test_swap_flip_rate_zero_for_stable_judge():
         verdicts.append(_pair(f"i{i}", "a", swapped=True))
     result = swap_flip_rate(verdicts)
     assert result.value == pytest.approx(0.0)
-    assert result.triggered is False
+    assert result.triggered is None
 
 
 def test_swap_flip_rate_needs_both_orders():

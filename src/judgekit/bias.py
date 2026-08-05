@@ -25,6 +25,15 @@ from judgekit.schema import GradedVerdict, PairwiseVerdict
 
 Row = TypeVar("Row")
 
+# Innocent bands: the region of practical equivalence for each probe, i.e.
+# what a defect-free judge could plausibly show.  Chosen, not derived — and
+# stated here so that disagreeing with them is a one-line change.
+INNOCENT_POSITION = (0.45, 0.55)
+INNOCENT_CORRELATION = (-0.1, 0.1)
+INNOCENT_EXCESS = (-0.1, 0.1)
+INNOCENT_SELF_PREFERENCE = (-0.2, 0.2)
+INNOCENT_SPREAD = (0.9, 1.1)
+
 
 def _group_rows(pairs: Sequence[tuple[str, Row]]) -> list[list[Row]]:
     """Group (item_id, row) pairs into per-item units, insertion-ordered."""
@@ -73,7 +82,7 @@ def position_preference(
         name="position preference",
         value=value,
         ci=ci,
-        null_value=0.5,
+        innocent=INNOCENT_POSITION,
         n=len(rows),
         detail=(
             f"chose the presented-first candidate in {value:.1%} of {len(rows)} decisive "
@@ -86,7 +95,10 @@ def swap_flip_rate(pairwise: Sequence[PairwiseVerdict], *, seed: int = 0) -> Pro
     """Share of pairs whose winner changes when presentation order is swapped.
 
     Matches verdicts on (item, judge, sample) across ``swapped`` False/True.
-    Any flip means presentation order, not content, decided the verdict.
+    A flip means presentation decided that pair — but a fair judge with any
+    noise flips genuinely close pairs too, so this is a stability reading, not
+    a bias verdict, and it never triggers on its own.  Systematic preference
+    shows up in ``position_preference``.
     """
     by_key: dict[tuple[str, str, int], dict[bool, PairwiseVerdict]] = {}
     for verdict in pairwise:
@@ -112,7 +124,7 @@ def swap_flip_rate(pairwise: Sequence[PairwiseVerdict], *, seed: int = 0) -> Pro
         name="swap flip rate",
         value=value,
         ci=ci,
-        null_value=0.0,
+        innocent=None,
         n=len(rows),
         detail=f"the winner flipped under order swap in {value:.1%} of {len(rows)} matched pairs",
     )
@@ -124,8 +136,10 @@ def identical_pair_decisiveness(
     """Non-tie rate on pairs marked ``meta={"identical": True}``.
 
     When both candidates are the same text, any decisive verdict is an
-    artifact of position or sampling noise.  This is the cheapest position
-    probe to add to a run: duplicate a few candidates and flag them.
+    artifact of position or sampling noise, so the rate reads directly as an
+    artifact level — descriptive, like the flip rate, since noise alone
+    produces it.  This is the cheapest probe to add to a run: duplicate a few
+    candidates and flag them.
     """
     rows = [
         (v.item_id, v.choice != "tie") for v in pairwise if v.meta.get("identical") is True
@@ -143,7 +157,7 @@ def identical_pair_decisiveness(
         name="identical-pair decisiveness",
         value=value,
         ci=ci,
-        null_value=0.0,
+        innocent=None,
         n=len(rows),
         detail=(
             f"declared a winner between identical candidates in {value:.1%} of "
@@ -217,7 +231,7 @@ def verbosity_graded(
         name="verbosity bias",
         value=value,
         ci=ci,
-        null_value=0.0,
+        innocent=INNOCENT_CORRELATION,
         n=len(rows),
         detail=(
             f"score-length rank correlation is {value:+.2f} after controlling for the human "
@@ -259,7 +273,7 @@ def verbosity_pairwise(
         name="verbosity bias (pairwise)",
         value=value,
         ci=ci,
-        null_value=0.0,
+        innocent=INNOCENT_EXCESS,
         n=len(rows),
         detail=(
             f"picks the longer candidate {value:+.1%} more often than the human reference "
@@ -302,7 +316,7 @@ def self_preference(
         name="self-preference",
         value=value,
         ci=ci,
-        null_value=0.0,
+        innocent=INNOCENT_SELF_PREFERENCE,
         n=len(rows),
         detail=(
             f"scores its own model's candidates {value:+.2f} scale points above its "
@@ -341,7 +355,7 @@ def central_tendency(
         name="central tendency",
         value=value,
         ci=ci,
-        null_value=1.0,
+        innocent=INNOCENT_SPREAD,
         n=len(rows),
         detail=f"judge score spread is {value:.2f}x the human spread over {len(rows)} verdicts",
     )

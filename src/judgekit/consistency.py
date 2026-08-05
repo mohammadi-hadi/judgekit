@@ -81,7 +81,7 @@ def resample_consistency(
         name="re-judgment unanimity",
         value=value,
         ci=ci,
-        null_value=None,
+        innocent=None,
         n=n_groups,
         detail=(
             f"all re-judgments of an item agreed in {value:.1%} of {n_groups} "
