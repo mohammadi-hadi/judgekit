@@ -1,4 +1,4 @@
-"""judgekit: audit an LLM judge before you trust it."""
+"""judgekit: bias probes for LLM judges, each with a bootstrap confidence interval."""
 
 from judgekit.audit import AuditReport, run_audit
 from judgekit.io import dump_verdicts, load_verdicts

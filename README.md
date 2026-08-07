@@ -1,6 +1,6 @@
 # judgekit
 
-Audit an LLM judge before you trust it.
+Bias probes for LLM judges, each with a bootstrap confidence interval: position, verbosity, self-preference, calibration and stability.
 
 [![ci](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml/badge.svg)](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21802868.svg)](https://doi.org/10.5281/zenodo.21802868)

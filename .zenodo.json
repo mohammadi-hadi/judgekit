@@ -7,7 +7,7 @@
       "orcid": "0000-0003-0860-9200"
     }
   ],
-  "description": "judgekit audits an LLM judge before you trust it: it reads a JSONL of verdicts and measures position preference, verbosity bias, self-preference, central tendency, calibration, consistency, and agreement with a human reference, each with bootstrap confidence intervals, then flags whatever leaves the range an innocent judge could occupy.",
+  "description": "Bias probes for LLM judges, each with a bootstrap confidence interval. judgekit reads a JSONL of verdicts and measures position preference, verbosity bias, self-preference, central tendency, calibration, consistency, and agreement with a human reference, then flags whatever leaves the range an innocent judge could occupy.",
   "license": "MIT",
   "keywords": ["llm-as-judge", "llm-evaluation", "calibration", "bias", "inter-rater-agreement"]
 }
