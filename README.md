@@ -215,8 +215,8 @@ If judgekit is useful in your research, please cite it (see
   author  = {Mohammadi, Hadi},
   title   = {judgekit: audit an LLM judge before you trust it},
   url     = {https://github.com/mohammadi-hadi/judgekit},
-  doi     = {10.5281/zenodo.21802869},
-  version = {0.2.0},
+  doi     = {10.5281/zenodo.21843564},
+  version = {0.2.1},
   year    = {2026}
 }
 ```
