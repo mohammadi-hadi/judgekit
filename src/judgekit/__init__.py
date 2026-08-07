@@ -5,7 +5,7 @@ from judgekit.io import dump_verdicts, load_verdicts
 from judgekit.result import ProbeResult, SkippedProbe
 from judgekit.schema import BinaryVerdict, GradedVerdict, PairwiseVerdict
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 __all__ = [
     "AuditReport",

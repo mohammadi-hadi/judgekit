@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 — 2026-08-07
+
+- The package summary and the README now say what judgekit measures instead of
+  carrying a tagline. Metadata only; no behaviour changed.
+
 ## 0.2.0 — 2026-08-05
 
 - Reports now list every check that could not run, with the exact fields to

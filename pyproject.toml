@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "judgekit"
-version = "0.2.0"
+version = "0.2.1"
 description = "Bias probes for LLM judges, each with a bootstrap confidence interval: position, verbosity, self-preference, calibration and stability."
 readme = "README.md"
 license = { text = "MIT" }
