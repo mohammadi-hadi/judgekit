@@ -4,6 +4,7 @@ Audit an LLM judge before you trust it.
 
 [![ci](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml/badge.svg)](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21802868.svg)](https://doi.org/10.5281/zenodo.21802868)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An LLM judge is a model too. It can prefer whichever answer came first, reward
 padding, favor its own outputs, hug the middle of the scale, and say "90%
