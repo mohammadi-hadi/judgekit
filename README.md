@@ -1,10 +1,16 @@
+<div align="center">
+
 # judgekit
 
-Bias probes for LLM judges, each with a bootstrap confidence interval: position, verbosity, self-preference, calibration and stability.
-
 [![ci](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml/badge.svg)](https://github.com/mohammadi-hadi/judgekit/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/judgekit)](https://pypi.org/project/judgekit/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21802868.svg)](https://doi.org/10.5281/zenodo.21802868)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+*Bias probes for LLM judges, each with a bootstrap confidence interval: position, verbosity, self-preference, calibration and stability.*
+
+</div>
 
 An LLM judge is a model too. It can prefer whichever answer came first, reward
 padding, favor its own outputs, hug the middle of the scale, and say "90%
