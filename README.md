@@ -66,10 +66,13 @@ Same task, different failure modes at different severities. Two judges follow
 slot order — aya picks whatever is presented first 91.0% of the time and flips
 81.9% of pairs when the order is swapped; qwen sits at 76.8% and 56.8%. The
 llama judge grades effort instead, picking the longer answer 48 points more
-often than correctness warrants and agreeing with ground truth less often than
-a coin flip. Two of the three never once declare a tie between identical
-answers. n=105 pairs, adversarial by construction — an illustration of what
-the probes see, not a model leaderboard.
+often than correctness warrants and scoring 0.443 against ground truth. Two of
+the three never once declare a tie between identical answers, which is also
+why that 0.443 is softer than it looks: those 15 pairs are unwinnable for a
+judge that never ties, and on the 90 adversarial pairs alone the llama judge
+reaches 0.517 — level with chance rather than below it. n=105 pairs,
+adversarial by construction — an illustration of what the probes see, not a
+model leaderboard.
 
 ## Install
 
