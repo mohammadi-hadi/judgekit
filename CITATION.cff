@@ -8,11 +8,11 @@ authors:
     affiliation: "Utrecht University"
     orcid: "https://orcid.org/0000-0003-0860-9200"
 repository-code: "https://github.com/mohammadi-hadi/judgekit"
-doi: 10.5281/zenodo.21843564
+doi: 10.5281/zenodo.21802868
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.21802868
-    description: "DOI for all versions; resolves to the latest release"
+    value: 10.5281/zenodo.21843564
+    description: "DOI for version v0.2.1"
 license: MIT
 version: 0.2.1
 date-released: "2026-08-07"
