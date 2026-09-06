@@ -207,12 +207,11 @@ the LLM-as-a-judge survey ([Gu et al., 2024](https://arxiv.org/abs/2411.15594)).
 judgekit's contribution is packaging the checks as one auditable tool with
 uncertainty on every number and validation by implantation.
 
-Companion projects: [trajectory-judge](https://github.com/mohammadi-hadi/trajectory-judge)
-measures what outcome-only judges miss on agent trajectories;
-[EvalMORAAL](https://github.com/mohammadi-hadi/EvalMORAAL) applies
-chain-of-thought judging to moral alignment across 20 models;
-[arenakit](https://github.com/mohammadi-hadi/arenakit) audits the pairwise
-leaderboard a judge's verdicts add up to.
+## Part of evalstack
+
+[evalstack](https://github.com/mohammadi-hadi/evalstack) is the map of these
+eleven evaluation tools: what each one measures, what it found on real data,
+and the two chains that run end to end.
 
 ## Citation
 
