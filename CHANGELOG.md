@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.2 — 2026-11-03
+
+- The README qualifies the llama3.1:8b truth-agreement figure: 0.443 overall,
+  but 0.517 on the 90 adversarial pairs alone, level with chance rather than
+  below it.
+- README figures and file links are absolute, so they render on PyPI.
+- The citation file cites only the concept DOI, which resolves to the latest
+  release. No behaviour changed.
+
 ## 0.2.1 — 2026-08-07
 
 - The package summary and the README now say what judgekit measures instead of
